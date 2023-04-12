@@ -78,12 +78,14 @@ int main()
 	int max = numeric_limits<int>::min();
 	int max_index = 0;
 
-	auto max_score = max_element(players.begin(), players.end(), [](const Player& a, const Player& b) {
+	sum += players[0].getScore();
+	auto max_score = max_element(players.begin(), players.end(), [&sum](const Player& a, const Player& b) {
+		sum += b.getScore();
 		return a.getScore() < b.getScore();
 		});
-	sum = accumulate(players.begin(), players.end(), 0ll, [](long long sum, const Player& a) {
-		return sum + a.getScore();
-		});
+	//sum = accumulate(players.begin(), players.end(), 0ll, [](long long sum, const Player& a) {
+	//	return sum + a.getScore();
+	//	});
 
 
 	//for (int i = 0; i < PLAYER_NUM; ++i)	
@@ -186,7 +188,7 @@ int main()
 	cout << "a가 10개 이상인 Player의 수:" << moreThan10Num << endl;
 
 	cout << "--------------------------------------------------------------------------------" <<  endl << endl;
-	//4
+	//5
 	cout << "5번 문제\n";
 
 	size_t inputId;
