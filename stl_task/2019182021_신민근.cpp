@@ -67,7 +67,7 @@ int main()
 	cout << "1번 문제\n";
 	players[PLAYER_NUM - 1].print();
 
-	cout << "--------------------------------------------------------------------------------------------------" << endl << endl;
+	cout << "--------------------------------------------------------------------------------" << endl << endl;
 	//2
 	cout << "2번 문제\n";
 
@@ -94,7 +94,7 @@ int main()
 	duration = std::chrono::duration_cast<std::chrono::microseconds>(end_time - start_time).count();
 	cout << "걸린 시간: " << duration << endl;*/
 	
-	cout << "--------------------------------------------------------------------------------------------------" << endl << endl;
+	cout << "--------------------------------------------------------------------------------" << endl << endl;
 	//3
 	cout << "3번 문제\n";
 
@@ -104,41 +104,45 @@ int main()
 
 	ofstream out{ "같은아이디.txt" };
 
+	int allSameNum = 0;
 	int firstIndex = 0;
-	int same_count = 1;
+	int sameCount = 1;
 	size_t prevID = players[0].getID();
 	for (int i = 1; i < PLAYER_NUM; ++i)
 	{
 		if (players[i].getID() != prevID)
 		{
-			if (same_count > 1)
+			if (sameCount > 1)
 			{
-				for (int j = firstIndex; j < firstIndex + same_count; ++j)
+				for (int j = firstIndex; j < firstIndex + sameCount; ++j)
 				{
+					++allSameNum;
 					out << "이름:" << players[j].getName() << ", ID:" << players[j].getID() << endl;
 				}
 			}
-			same_count = 1;
+			sameCount = 1;
 			firstIndex = i;
 			prevID = players[i].getID();
 			continue;
 		}
-		++same_count;
+		++sameCount;
 
 		if (i == PLAYER_NUM - 1)
 		{
-			if (same_count > 1)
+			if (sameCount > 1)
 			{
-				for (int j = firstIndex; j < firstIndex + same_count; ++j)
+				for (int j = firstIndex; j < firstIndex + sameCount; ++j)
 				{
+					++allSameNum;
 					out << "이름:" << players[j].getName() << ", ID:" << players[j].getID() << endl;
 				}
 			}
 			break;
 		}
 	}
+	cout << "ID가 같은 모든 객체의 수:" << allSameNum;
 
-	cout << "--------------------------------------------------------------------------------------------------" << endl << endl;
+	cout << "--------------------------------------------------------------------------------" << endl << endl;
 	//4
 	cout << "4번 문제\n";
 
@@ -170,14 +174,15 @@ int main()
 	}
 	cout << "a가 10개 이상인 Player의 수:" << moreThan10Num << endl;
 
-	cout << "--------------------------------------------------------------------------------------------------" <<  endl << endl;
+	cout << "--------------------------------------------------------------------------------" <<  endl << endl;
 	//4
 	cout << "5번 문제\n";
 
 	size_t inputId;
-	cout << "ID입력:";
+	cout << "ID입력(ID외의 입력시 종료):";
 	while (cin >> inputId)
 	{
+		cout << endl << "ID 정렬";
 		sort(players.begin(), players.end(), [](const Player& a, const Player& b) {
 			return a.getID() < b.getID();
 			});
@@ -215,19 +220,61 @@ int main()
 			}
 		}
 
+		cout << endl << "name 정렬";
+		sort(players.begin(), players.end(), [](const Player& a, const Player& b) {
+			return a.getName() < b.getName();
+			});
 
-		//sort(players.begin(), players.end(), [](const Player& a, const Player& b) {
-		//	return a.getName() < a.getName();
-		//	});
+		itr = players.begin();
+		itr = find_if(players.begin(), players.end(), [&inputId](const Player& a) {
+			return a.getID() == inputId;
+			});
+		if (itr != players.end())
+		{
+
+			itr->print();
+
+			if (itr != players.begin())
+			{
+				(itr - 1)->print();
+			}
+
+			if (itr + 1 != players.end())
+			{
+				(itr + 1)->print();
+			}
+			cout << endl << endl;
+		}
+
+		cout << "score 정렬";
+		sort(players.begin(), players.end(), [](const Player& a, const Player& b) {
+			return a.getScore() < b.getScore();
+			});
+
+		itr = players.begin();
+		itr = find_if(players.begin(), players.end(), [&inputId](const Player& a) {
+			return a.getID() == inputId;
+			});
+		if (itr != players.end())
+		{
+
+			itr->print();
+
+			if (itr != players.begin())
+			{
+				(itr - 1)->print();
+			}
+
+			if (itr + 1 != players.end())
+			{
+				(itr + 1)->print();
+			}
+			cout << endl << endl;
+		}
 
 
-
-		//sort(players.begin(), players.end(), [](const Player& a, const Player& b) {
-		//	return a.getScore() < a.getScore();
-		//	});
-
-		cout << "--------------------------------------------------------------------------------------------------" << endl;
-		cout << "ID입력:";
+		cout << "--------------------------------------------------------------------------------" << endl;
+		cout << "ID입력(ID외의 입력시 종료):";
 		cin.ignore(numeric_limits<streamsize>::max(), '\n');
 	}
 }
