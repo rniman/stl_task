@@ -68,26 +68,37 @@ int main()
 	players[PLAYER_NUM - 1].print();
 
 	cout << "--------------------------------------------------------------------------------" << endl << endl;
-	//2
+	//2 점수:423456369
 	cout << "2번 문제\n";
 
 	//start_time = std::chrono::high_resolution_clock::now();
-
+	
+	//점수:123468028
 	long long sum = 0;
 	int max = numeric_limits<int>::min();
 	int max_index = 0;
-	for (int i = 0; i < PLAYER_NUM; ++i)
-	{
-		sum += players[i].getScore();
-		if (max < players[i].getScore())
-		{
-			max = players[i].getScore();
-			max_index = i;
-		}
-	}
+
+	auto max_score = max_element(players.begin(), players.end(), [](const Player& a, const Player& b) {
+		return a.getScore() < b.getScore();
+		});
+	sum = accumulate(players.begin(), players.end(), 0ll, [](long long sum, const Player& a) {
+		return sum + a.getScore();
+		});
+
+
+	//for (int i = 0; i < PLAYER_NUM; ++i)	
+	//{
+	//	sum += players[i].getScore();
+	//	if (max < players[i].getScore())
+	//	{
+	//		max = players[i].getScore();
+	//		max_index = i;
+	//	}
+	//}
 	
 	cout << "가장 큰 점수의 Player\n";
-	players[max_index].print();
+	max_score->print();
+	//players[max_index].print();
 	cout <<  "모든 Player의 평균 점수:" << sum / PLAYER_NUM << endl;
 	
 	/*end_time = std::chrono::high_resolution_clock::now();
