@@ -292,38 +292,50 @@ void ExecuteThird()
 	int firstIndex = 0;
 	int sameCount = 1;
 	size_t prevID = players[0].getID();
-	for (int i = 1; i < PLAYER_NUM; ++i)
+	auto itr = players.begin();
+	auto prevItr = itr;
+	while (true)
 	{
-		if (players[i].getID() != prevID)
-		{
-			if (sameCount > 1)
-			{
-				for (int j = firstIndex; j < firstIndex + sameCount; ++j)
-				{
-					++allSameNum;
-					out << "이름:" << players[j].getName() << ", ID:" << players[j].getID() << endl;
-				}
-			}
-			sameCount = 1;
-			firstIndex = i;
-			prevID = players[i].getID();
-			continue;
-		}
-		++sameCount;
+		itr = find_if(prevItr, players.end(), [&prevID](const Player& p) {
+			return p.getID() != prevID;
+			});
 
-		if (i == PLAYER_NUM - 1)
-		{
-			if (sameCount > 1)
-			{
-				for (int j = firstIndex; j < firstIndex + sameCount; ++j)
-				{
-					++allSameNum;
-					out << "이름:" << players[j].getName() << ", ID:" << players[j].getID() << endl;
-				}
-			}
-			break;
-		}
+		if(distance(prevItr, itr) > 1)
+
 	}
+
+	//for (int i = 1; i < PLAYER_NUM; ++i)
+	//{
+	//	if (players[i].getID() != prevID)
+	//	{
+	//		if (sameCount > 1)
+	//		{
+	//			for (int j = firstIndex; j < firstIndex + sameCount; ++j)
+	//			{
+	//				++allSameNum;
+	//				out << "이름:" << players[j].getName() << ", ID:" << players[j].getID() << endl;
+	//			}
+	//		}
+	//		sameCount = 1;
+	//		firstIndex = i;
+	//		prevID = players[i].getID();
+	//		continue;
+	//	}
+	//	++sameCount;
+
+	//	if (i == PLAYER_NUM - 1)
+	//	{
+	//		if (sameCount > 1)
+	//		{
+	//			for (int j = firstIndex; j < firstIndex + sameCount; ++j)
+	//			{
+	//				++allSameNum;
+	//				out << "이름:" << players[j].getName() << ", ID:" << players[j].getID() << endl;
+	//			}
+	//		}
+	//		break;
+	//	}
+	//}
 	cout << "ID가 같은 모든 객체의 수:" << allSameNum << endl;
 
 	cout << "--------------------------------------------------------------------------------" << endl << endl;
@@ -339,28 +351,30 @@ void ExecuteFourth()
 	{
 		sort(player.getP(), player.getP() + player.getNum());
 
-		//auto itr = find_if(player.getP(), player.getP() + player.getNum(), [](char c) {
-		//	return c != 'a';
-		//	});
+		auto itr = find_if(player.getP(), player.getP() + player.getNum(), [](char c) {
+			return c != 'a';
+			});
 
-		//if (distance(player.getP(), itr) >= 10)
-		//	++moreThan10Num;
-
-		int aNum = 0;
-		for (int i = 0; i < player.getNum(); ++i)
-		{
-			if (player.getP()[i] != 'a')
-			{
-				break;
-			}
-
-			++aNum;
-		}
-
-		if (aNum >= 10)
+		if (distance(player.getP(), itr) >= 10)
 		{
 			++moreThan10Num;
-		}
+		}	
+
+		//int aNum = 0;
+		//for (int i = 0; i < player.getNum(); ++i)
+		//{
+		//	if (player.getP()[i] != 'a')
+		//	{
+		//		break;
+		//	}
+
+		//	++aNum;
+		//}
+
+		//if (aNum >= 10)
+		//{
+		//	++moreThan10Num;
+		//}
 
 		//if (count(player.getP(), player.getP() + player.getNum(), 'a') >= 10)
 		//{
