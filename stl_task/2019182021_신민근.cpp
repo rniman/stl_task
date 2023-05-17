@@ -22,8 +22,8 @@ public:
 	Player(const Player& other);
 	Player& operator=(const Player& other);
 
-	//Player(Player&& other) noexcept;
-	//Player& operator=(Player&& other) noexcept;
+	Player(Player&& other) noexcept;
+	Player& operator=(Player&& other) noexcept;
 
 	string getName() const;
 	int getScore() const;
@@ -74,11 +74,11 @@ int main()
 		player.read(in);
 	}
 
-	//ExecuteFirst();
+	ExecuteFirst();
 
-	//ExecuteSecond();
+	ExecuteSecond();
 
-	//ExecuteThird();
+	ExecuteThird();
 
 	ExecuteFourth();
 
@@ -122,43 +122,43 @@ Player& Player::operator=(const Player& other)
 	return *this;
 }
 
-//Player::Player(Player&& other) noexcept
-//{
-//	name = other.name;
-//	score = other.score;
-//	id = other.id;
-//	num = other.num;
-//	p = other.p;
-//
-//	other.name = "";
-//	other.score = 0;
-//	other.id = 0;
-//	other.num = 0;
-//	other.p = nullptr;
-//}
-//
-//Player& Player::operator=(Player&& other) noexcept
-//{
-//	if (this == &other)
-//	{
-//		return *this;
-//	}
-//	delete[] p;
-//
-//	name = other.name;
-//	score = other.score;
-//	id = other.id;
-//	num = other.num;
-//	p = other.p;
-//
-//	other.name = "";
-//	other.score = 0;
-//	other.id = 0;
-//	other.num = 0;
-//	other.p = nullptr;
-//
-//	return *this;
-//}
+Player::Player(Player&& other) noexcept
+{
+	name = other.name;
+	score = other.score;
+	id = other.id;
+	num = other.num;
+	p = other.p;
+
+	other.name = "";
+	other.score = 0;
+	other.id = 0;
+	other.num = 0;
+	other.p = nullptr;
+}
+
+Player& Player::operator=(Player&& other) noexcept
+{
+	if (this == &other)
+	{
+		return *this;
+	}
+	delete[] p;
+
+	name = other.name;
+	score = other.score;
+	id = other.id;
+	num = other.num;
+	p = other.p;
+
+	other.name = "";
+	other.score = 0;
+	other.id = 0;
+	other.num = 0;
+	other.p = nullptr;
+
+	return *this;
+}
 
 string Player::getName() const
 {
@@ -272,38 +272,50 @@ void ExecuteSecond()
 
 void ExecuteThird()
 {
+	//1149459
+
 	cout << "3번 문제\n";
 
-	start_time = std::chrono::high_resolution_clock::now();
-
+	//start_time = std::chrono::high_resolution_clock::now();
 
 	sort(players.begin(), players.end(), [](const Player& a, const Player& b) {
 		return a.getID() < b.getID();
 		});
 
-	end_time = std::chrono::high_resolution_clock::now();
-	duration = std::chrono::duration_cast<std::chrono::seconds>(end_time - start_time).count();
-	cout << "걸린 시간: " << duration << "s" << endl;
+	//end_time = std::chrono::high_resolution_clock::now();
+	//duration = std::chrono::duration_cast<std::chrono::seconds>(end_time - start_time).count();
+	//cout << "걸린 시간: " << duration << "s" << endl;
 
 
 	ofstream out{ "같은아이디.txt" };
 
 	int allSameNum = 0;
-	int firstIndex = 0;
-	int sameCount = 1;
-	size_t prevID = players[0].getID();
 	auto itr = players.begin();
 	auto prevItr = itr;
 	while (true)
 	{
-		itr = find_if(prevItr, players.end(), [&prevID](const Player& p) {
-			return p.getID() != prevID;
+		itr = find_if(prevItr, players.end(), [&prevItr](const Player& p) {
+			return p.getID() != prevItr->getID();
 			});
 
-		if(distance(prevItr, itr) > 1)
 
+		if (distance(prevItr, itr) > 1)
+		{
+			for (auto p = prevItr; p != itr; ++p)
+			{
+				++allSameNum;
+				out << "이름:" << p->getName() << ", ID:" << p->getID() << endl;
+			}
+		}
+
+		if (itr == players.end())
+			break;
+		prevItr = itr;
 	}
 
+	//int firstIndex = 0;
+	//int sameCount = 1;
+	//size_t prevID = players[0].getID();
 	//for (int i = 1; i < PLAYER_NUM; ++i)
 	//{
 	//	if (players[i].getID() != prevID)
