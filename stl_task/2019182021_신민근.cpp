@@ -6,7 +6,7 @@
 #include <numeric>
 #include <chrono>
 #include <algorithm>
-#include <unordered_map>
+#include <list>
 
 
 using namespace std;
@@ -18,7 +18,7 @@ class Player
 public:
 	Player();
 	~Player();
-	
+
 	Player(const Player& other);
 	Player& operator=(const Player& other);
 
@@ -37,7 +37,7 @@ public:
 	void read(istream& is);
 	void print() const;
 
-//private:
+	//private:
 	string name;
 	int score;
 	size_t id;
@@ -73,16 +73,16 @@ int main()
 	{
 		player.read(in);
 	}
-	
-	ExecuteFirst();
 
-	ExecuteSecond();
+	//ExecuteFirst();
 
-	ExecuteThird();
+	//ExecuteSecond();
 
-	//ExecuteFourth();
-	
-	//ExecuteFifth();
+	//ExecuteThird();
+
+	ExecuteFourth();
+
+	ExecuteFifth();
 }
 
 Player::Player()
@@ -91,7 +91,7 @@ Player::Player()
 
 Player::~Player()
 {
-	delete[] p; 
+	delete[] p;
 }
 
 Player::Player(const Player& other)
@@ -239,7 +239,7 @@ void ExecuteSecond()
 		sum += b.getScore();
 		return a.getScore() < b.getScore();
 		});
-	
+
 	//sum = accumulate(players.begin(), players.end(), 0ll, [](long long sum, const Player& a) {
 	//	return sum + a.getScore();
 	//	});
@@ -331,13 +331,21 @@ void ExecuteThird()
 
 void ExecuteFourth()
 {
+	//983062
 	cout << "4번 문제\n";
 
 	int moreThan10Num = 0;
 	for (Player& player : players)
 	{
 		sort(player.getP(), player.getP() + player.getNum());
-		
+
+		//auto itr = find_if(player.getP(), player.getP() + player.getNum(), [](char c) {
+		//	return c != 'a';
+		//	});
+
+		//if (distance(player.getP(), itr) >= 10)
+		//	++moreThan10Num;
+
 		int aNum = 0;
 		for (int i = 0; i < player.getNum(); ++i)
 		{
@@ -388,9 +396,9 @@ void ExecuteFifth()
 		//itr = find_if(players.begin(), players.end(), [&inputId](const Player& a) {
 		//	return a.getID() == inputId;
 		//	});
-		
+
 		//if (itr != players.end())
-		if(itr->getID() == inputId)
+		if (itr != players.end() && itr->getID() == inputId)
 		{
 			array<Player, PLAYER_NUM>::iterator  first, last;
 
@@ -479,64 +487,77 @@ void ExecuteFifth()
 
 
 		end_time = std::chrono::high_resolution_clock::now();
-		duration = std::chrono::duration_cast<std::chrono::milliseconds > (end_time - start_time).count();
+		duration = std::chrono::duration_cast<std::chrono::milliseconds> (end_time - start_time).count();
 		cout << "걸린 시간: " << duration << "ms" << endl;
 
-		cout << endl << endl << "name 정렬";
+		cout << endl << endl << "--------------------------------------------------------------------------------" << endl;
+		cout << "name 정렬";
 		sort(players.begin(), players.end(), [](const Player& a, const Player& b) {
 			return a.getName() < b.getName();
 			});
 
-		
-		itr = lower_bound(players.begin(), players.end(), inputId, [](const Player& a, size_t id) {
-			return a.getID() < id;
-			});
+		itr = players.begin();
 
-		//itr = find_if(players.begin(), players.end(), [&inputId](const Player& a) {
-		//	return a.getID() == inputId;
-		//	});
-
-		if (itr != players.end())
+		while (true)
 		{
+			itr = find_if(itr, players.end(), [&inputId](const Player& a) {
+				return a.getID() == inputId;
+				});
 
-			itr->print();
-
+			if (itr == players.end())
+			{
+				break;
+			}
+			
 			if (itr != players.begin())
 			{
 				(itr - 1)->print();
 			}
+
+			itr->print();
 
 			if (itr + 1 != players.end())
 			{
 				(itr + 1)->print();
 			}
 			cout << endl << endl;
+
+			++itr;
 		}
 
+		cout << endl << endl << "--------------------------------------------------------------------------------" << endl;
 		cout << "score 정렬";
+		
 		sort(players.begin(), players.end(), [](const Player& a, const Player& b) {
 			return a.getScore() < b.getScore();
 			});
 
 		itr = players.begin();
-		itr = find_if(players.begin(), players.end(), [&inputId](const Player& a) {
-			return a.getID() == inputId;
-			});
-		if (itr != players.end())
+		while (true)
 		{
+			itr = find_if(itr, players.end(), [&inputId](const Player& a) {
+				return a.getID() == inputId;
+				});
 
-			itr->print();
+			if (itr == players.end())
+			{
+				break;
+			}
 
 			if (itr != players.begin())
 			{
 				(itr - 1)->print();
 			}
 
+			itr->print();
+
 			if (itr + 1 != players.end())
 			{
 				(itr + 1)->print();
 			}
 			cout << endl << endl;
+
+			++itr;
 		}
 
 
