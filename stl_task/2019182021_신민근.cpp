@@ -6,7 +6,6 @@
 #include <numeric>
 #include <chrono>
 #include <algorithm>
-#include <list>
 
 
 using namespace std;
@@ -229,16 +228,16 @@ void ExecuteSecond()
 	cout << "2번 문제\n";
 	//start_time = std::chrono::high_resolution_clock::now();
 
-	//점수:123468028
 	long long sum = 0;
-	//int max = numeric_limits<int>::min();
-	//int max_index = 0;
 
 	sum += players[0].getScore();
 	auto max_score = max_element(players.begin(), players.end(), [&sum](const Player& a, const Player& b) {
 		sum += b.getScore();
 		return a.getScore() < b.getScore();
 		});
+
+	//int max = numeric_limits<int>::min();
+	//int max_index = 0;
 
 	//sum = accumulate(players.begin(), players.end(), 0ll, [](long long sum, const Player& a) {
 	//	return sum + a.getScore();
@@ -258,9 +257,10 @@ void ExecuteSecond()
 	//	}
 	//}
 
+	//players[max_index].print();
+
 	cout << "가장 큰 점수의 Player\n";
 	max_score->print();
-	//players[max_index].print();
 	cout << "모든 Player의 평균 점수:" << sum / PLAYER_NUM << endl;
 
 	//end_time = std::chrono::high_resolution_clock::now();
@@ -411,9 +411,10 @@ void ExecuteFifth()
 			return a.getID() < b.getID();
 			});
 
-		start_time = std::chrono::high_resolution_clock::now();
+		//start_time = std::chrono::high_resolution_clock::now();
 
 		array<Player, PLAYER_NUM>::iterator itr = players.begin();
+		int numSameId = 0;
 
 		itr = lower_bound(players.begin(), players.end(), inputId, [](const Player& a, size_t id) {
 			return a.getID() < id;
@@ -469,6 +470,7 @@ void ExecuteFifth()
 
 			for (auto p = first; p != last + 1; ++p)
 			{
+				++numSameId;
 				p->print();
 			}
 
@@ -512,9 +514,9 @@ void ExecuteFifth()
 		}
 
 
-		end_time = std::chrono::high_resolution_clock::now();
-		duration = std::chrono::duration_cast<std::chrono::milliseconds> (end_time - start_time).count();
-		cout << "걸린 시간: " << duration << "ms" << endl;
+		//end_time = std::chrono::high_resolution_clock::now();
+		//duration = std::chrono::duration_cast<std::chrono::milliseconds> (end_time - start_time).count();
+		//cout << "걸린 시간: " << duration << "ms" << endl;
 
 		cout << endl << endl << "--------------------------------------------------------------------------------" << endl;
 		cout << "name 정렬";
@@ -522,6 +524,7 @@ void ExecuteFifth()
 			return a.getName() < b.getName();
 			});
 
+		int numOutput = 0;
 		itr = players.begin();
 
 		while (true)
@@ -540,6 +543,7 @@ void ExecuteFifth()
 				(itr - 1)->print();
 			}
 
+			++numOutput;
 			itr->print();
 
 			if (itr + 1 != players.end())
@@ -547,6 +551,9 @@ void ExecuteFifth()
 				(itr + 1)->print();
 			}
 			cout << endl << endl;
+
+			if (numOutput == numSameId)
+				break;
 
 			++itr;
 		}
@@ -558,6 +565,7 @@ void ExecuteFifth()
 			return a.getScore() < b.getScore();
 			});
 
+		numOutput = 0;
 		itr = players.begin();
 		while (true)
 		{
@@ -575,6 +583,7 @@ void ExecuteFifth()
 				(itr - 1)->print();
 			}
 
+			++numOutput;
 			itr->print();
 
 			if (itr + 1 != players.end())
@@ -582,6 +591,9 @@ void ExecuteFifth()
 				(itr + 1)->print();
 			}
 			cout << endl << endl;
+
+			if (numOutput == numSameId)
+				break;
 
 			++itr;
 		}
